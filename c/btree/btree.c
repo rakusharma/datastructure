@@ -264,6 +264,7 @@ void dfs_post_order_nr(struct node *root)
         visit[i++] = cur;
         } 
         else {
+            /*This is where we are visiting*/
             stack = _push(&cur, &stack, TRUE);
 
            if (cur->r)  stack = _push(&(cur->r), &stack, FALSE);
@@ -274,13 +275,81 @@ void dfs_post_order_nr(struct node *root)
 
    }
 
-    printf("dfs post order -> ");
+    printf("\ndfs post order -> ");
     for (int j = 0; j < i; ++j)
         printf(" %2d ", ((struct node*)visit[j])->d);
 
  
  
 }
+void dfs_in_order_nr_v1(struct node *root)
+{
+    int *visit[100] = {0x00};
+    struct _item *stack = NULL, *item;
+    struct node *cur = root;
+    int i = 0;
+    stack = _push(&cur, &stack, FALSE);
+
+
+    while(_stack_len(stack) != 0) {
+        item =_pop(&stack);
+        cur = (struct node*)(item->ptr);
+        if(item->visited) {
+        visit[i++] = cur;
+        } 
+        else {
+
+           if (cur->r)  stack = _push(&(cur->r), &stack, FALSE);
+            stack = _push(&cur, &stack, TRUE);
+            if (cur->l) stack = _push(&(cur->l), &stack, FALSE);
+        }
+
+
+
+   }
+
+    printf("\ndfs in order v1-> ");
+    for (int j = 0; j < i; ++j)
+        printf(" %2d ", ((struct node*)visit[j])->d);
+
+ 
+ 
+}
+
+void dfs_pre_order_nr_v1(struct node *root)
+{
+    int *visit[100] = {0x00};
+    struct _item *stack = NULL, *item;
+    struct node *cur = root;
+    int i = 0;
+    stack = _push(&cur, &stack, FALSE);
+
+
+    while(_stack_len(stack) != 0) {
+        item =_pop(&stack);
+        cur = (struct node*)(item->ptr);
+        if(item->visited) {
+        visit[i++] = cur;
+        } 
+        else {
+
+           if (cur->r)  stack = _push(&(cur->r), &stack, FALSE);
+            if (cur->l) stack = _push(&(cur->l), &stack, FALSE);
+            stack = _push(&cur, &stack, TRUE);
+        }
+
+
+
+   }
+
+    printf("\ndfs in order v1-> ");
+    for (int j = 0; j < i; ++j)
+        printf(" %2d ", ((struct node*)visit[j])->d);
+
+ 
+ 
+}
+
 
 
 int main()
@@ -300,8 +369,13 @@ int main()
     printf("dfs in order recursive  => ");
     dfs_in_order(root);
     dfs_in_order_nr(root);
+    dfs_in_order_nr_v1(root);
+
     dfs_pre_order_nr(root);
+    dfs_pre_order_nr_v1(root);
+    
     dfs_post_order_nr(root);
+    
     //print_stack(stack);
 
     return 0;
