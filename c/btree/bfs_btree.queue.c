@@ -1,13 +1,11 @@
 #include<stdio.h>
 #include<malloc.h>
 
-/*DFS -> stack based*/
 struct node {
     int d;
     struct node *l;
     struct node *r;
 };
-/*stack*/
 
 struct node *alloc(int d)
 {
@@ -32,9 +30,7 @@ struct node *add_node(int d, struct node *node)
 /*non recursive in*/
 void *add_node_nr(int d, struct node **root)
 {
-
     struct node **cur = root;
-
     while (1) {
         if (*cur == NULL) {*cur =  alloc(d);break;}
         if (d < (*cur)->d)
@@ -42,6 +38,8 @@ void *add_node_nr(int d, struct node **root)
         else cur = &(*cur)->r;
     }
 }
+
+/*queue*/
 
 struct _item {
     void *ptr;
@@ -56,8 +54,6 @@ void *_enqueue(void **p, struct _item **root, int visited)
     x->ptr = *p;
     x->visited = visited;
     x->next = NULL;
-
-
     if (*root == NULL)
         *root = x;
     else {
@@ -67,7 +63,6 @@ void *_enqueue(void **p, struct _item **root, int visited)
         }
         itr->next = x;
     }
-
 }
 
 struct _item *_pop(struct _item **root)
@@ -86,15 +81,12 @@ int _q_len(struct _item *queue)
         ++n;
         i = i->next;
     }
-    //printf("stack len %4d\n", n);
     return n;
 }
 void _q_print(struct _item *queue)
 {
     struct _item *itr = queue;
-
     while (itr != NULL) {
-        // printf("ptr -> %p val ->%d\n", i->ptr, ((struct node*)(i->ptr))->d);
         printf(" [%d] ", ((struct node*)(itr->ptr))->d);
         itr = itr->next;
     }
@@ -102,7 +94,6 @@ void _q_print(struct _item *queue)
 
 #define TRUE 1
 #define FALSE 0
-
 struct tree_node {
     int level;
     struct _item *q;
@@ -151,9 +142,11 @@ void bfs(struct node *root)
     printf("\n child-> ");
     for (int j = 0; j < no_of_child; ++j)
         printf(" %2d ", ((struct node*)child[j])->d);
-#if 1
-    struct _item *path[100] = {NULL};
 
+    //problem = create list of elements to the node 
+    //Sol> Get all the child nodes, and get the connected parent to the root
+
+    struct _item *path[100] = {NULL};
 
     for (int j = 0; j < no_of_child; ++j) {
         struct node *c = child[j];
@@ -184,13 +177,7 @@ void bfs(struct node *root)
         _q_print(path[x]);
         printf("\n");
     } 
-#endif
-
-
 }
-
-//problem = create list of elements to the node 
-//Sol> Get all the child nodes, and get the parents to the root
 
 
 
